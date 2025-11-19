@@ -3,254 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Life Simulator: ChromaShift</title>
+    <title>ChromaShift: The Generative Dream Engine</title>
     <link rel="stylesheet" href="chromashift.css">
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <script type="importmap">
         {
             "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+                "three": "./lib/three.module.js"
             }
         }
     </script>
 </head>
 <body>
-    <!-- Reality Blink Overlay -->
-    <div id="reality-blink" class="hidden"></div>
-    
-    <!-- Eye Blink Effect -->
-    <div id="eye-mask" class="eye-open">
-        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path class="eye-shape top-lid" d="M0,0 L100,0 L100,20 Q50,10 0,20 Z" />
-            <path class="eye-shape bottom-lid" d="M0,100 L100,100 L100,80 Q50,90 0,80 Z" />
-        </svg>
-    </div>
-
-    <!-- Panorama Container -->
-    <div id="panorama-container">
-        <!-- Three.js panorama will be rendered here -->
-    </div>
-
-    <!-- Dreamscape UI Overlay -->
+    <div id="panorama-container"></div>
     <div id="dreamscape-overlay">
-        <!-- Location Title with Glitch Effect -->
-        <div id="location-header">
-            <h1 id="location-title" data-text="CHROMA-DREAM INITIALIZATION">CHROMA-DREAM INITIALIZATION</h1>
-            <div id="reality-meter">
-                <span class="label">REALITY COHERENCE:</span>
-                <div class="meter-bar">
-                    <div id="reality-level" class="meter-fill" style="width: 23%"></div>
-                </div>
-                <span id="reality-percentage">23%</span>
-            </div>
+        <div class="output-container">
+            <!-- Location Title -->
+            <div class="output-section" id="location-section"></div>
+
+            <!-- Scene Description -->
+            <div class="output-section" id="scene-description-section"></div>
+
+            <!-- The Blink -->
+            <div class="output-section" id="blink-section"></div>
+
+            <!-- Anomaly Detected -->
+            <div class="output-section" id="anomaly-section"></div>
+
+            <!-- Dream State -->
+            <div class="output-section" id="dream-state-section"></div>
         </div>
 
-        <!-- Scene Description -->
-        <div id="scene-description">
-            <p id="scene-text">Loading consciousness stream...</p>
-        </div>
-
-        <!-- WTF Moment Ticker -->
-        <div id="wtf-ticker">
-            <span class="wtf-label">⚠️ ANOMALY DETECTED:</span>
-            <span id="wtf-text">Floor liquefaction observed</span>
-        </div>
-
-        <!-- Consciousness Stats -->
-        <div id="consciousness-stats">
-            <div class="stat-item">
-                <span class="stat-icon">🧠</span>
-                <span class="stat-label">LUCIDITY:</span>
-                <span class="stat-value" id="lucidity">47%</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-icon">👁️</span>
-                <span class="stat-label">PERCEPTION:</span>
-                <span class="stat-value" id="perception">DISTORTED</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-icon">⏰</span>
-                <span class="stat-label">DREAM TIME:</span>
-                <span class="stat-value" id="dream-time">∞:∞:∞</span>
-            </div>
-        </div>
+        <!-- Choice Bubbles are positioned absolutely -->
+        <div id="choice-bubbles-container"></div>
     </div>
 
-    <!-- Five Non-Linear Action Choices (Speech Bubbles) -->
-    <div id="action-choices">
-        <div class="choice-bubble choice-1" data-action="choice1">
-            <div class="bubble-pointer"></div>
-            <p class="choice-text">Touch the liquid floor</p>
-        </div>
-        
-        <div class="choice-bubble choice-2" data-action="choice2">
-            <div class="bubble-pointer"></div>
-            <p class="choice-text">Stare at the blinking mascot</p>
-        </div>
-        
-        <div class="choice-bubble choice-3" data-action="choice3">
-            <div class="bubble-pointer"></div>
-            <p class="choice-text">Lick the melting clock radio</p>
-        </div>
-        
-        <div class="choice-bubble choice-4" data-action="choice4">
-            <div class="bubble-pointer"></div>
-            <p class="choice-text">Walk through the meat cooler</p>
-        </div>
-        
-        <div class="choice-bubble choice-5 mission-choice hidden" data-action="choice5">
-            <div class="bubble-pointer"></div>
-            <p class="choice-text">🏆 Follow the trophy cart</p>
-        </div>
-    </div>
-
-    <!-- Subconscious Whisper System -->
-    <div id="whisper-system">
-        <p id="whisper-text"></p>
-    </div>
-
-    <!-- Generative Command Interface (Chromatist Powers) -->
     <div id="command-interface">
         <div class="command-header">
-            <span class="chromatist-icon">🧠</span>
-            <span class="command-label">CHROMATIST LUCID CONTROL</span>
+            <span class="header-icon">🧠</span>
+            <span class="header-label">CHROMATIST LUCID CONTROL</span>
         </div>
-        
-        <div class="command-modules">
-            <!-- Location Shift Input -->
-            <div class="command-module location-module">
-                <label for="location-input" class="module-label">
-                    <span class="label-icon">🌀</span>
-                    <span class="label-text">SHIFT DESTINATION:</span>
-                </label>
-                <input 
-                    type="text" 
-                    id="location-input" 
-                    class="command-input"
-                    placeholder="Chroma City, Street Corner"
-                    maxlength="60"
-                />
-                <button id="shift-button" class="command-button shift-button">
-                    <span class="button-text">SHIFT REALITY</span>
-                    <span class="button-icon">→</span>
-                </button>
-            </div>
-
-            <!-- Action Manifestation Input -->
-            <div class="command-module action-module">
-                <label for="action-input" class="module-label">
-                    <span class="label-icon">✨</span>
-                    <span class="label-text">MANIFESTATION COMMAND:</span>
-                </label>
-                <input 
-                    type="text" 
-                    id="action-input" 
-                    class="command-input"
-                    placeholder="Type your next action..."
-                    maxlength="100"
-                />
-                <button id="manifest-button" class="command-button manifest-button">
-                    <span class="button-text">MANIFEST</span>
-                    <span class="button-icon">⚡</span>
-                </button>
-            </div>
+        <div class="command-module">
+            <label for="location-input">🌀 SHIFT DESTINATION:</label>
+            <input type="text" id="location-input" placeholder="Current Location Name">
+            <button id="shift-button">SHIFT REALITY →</button>
         </div>
-
-        <div class="command-hint">
-            <p>💡 <strong>Chromatist Tip:</strong> Use bubbles for guided choices, or type commands for unlimited creative freedom</p>
+        <div class="command-module">
+            <label for="action-input">✨ MANIFESTATION COMMAND:</label>
+            <input type="text" id="action-input" placeholder="Type Your Next Action...">
+            <button id="manifest-button">MANIFEST ⚡</button>
+        </div>
+        <div class="command-tip">
+            💡 Chromatist Tip: Use bubbles for guidance or commands for unlimited creative freedom.
         </div>
     </div>
 
-    <!-- Branding & Awards Section (Bottom Right) -->
-    <div id="branding-section">
-        <div class="brand-item">
-            <img src="imgs/chroma_glitch_icon.png" alt="Chroma Icon" class="chroma-icon">
-            <p class="brand-text">Urban Life Simulator</p>
-            <p class="brand-subtext">ChromaShift Edition</p>
-        </div>
-        <div class="awards-badge">
-            <img src="imgs/chroma_awards_logo.png" alt="Chroma Awards" class="awards-logo">
-        </div>
+    <!-- Eye Blink Effect -->
+    <div id="eye-mask">
+        <div class="eyelid top"></div>
+        <div class="eyelid bottom"></div>
     </div>
 
-    <!-- Info Button (Top Right) -->
-    <div id="info-button-container">
-        <button id="info-btn" title="About ChromaShift">ℹ️</button>
-    </div>
-
-    <!-- Info Modal -->
-    <div id="info-modal" class="hidden">
-        <div class="modal-content">
-            <button class="close-modal" id="close-info">×</button>
-            <div class="modal-header">
-                <img src="imgs/uls_logo_4.png" alt="Urban Life Simulator" class="modal-logo">
-                <h2>URBAN LIFE SIMULATOR</h2>
-                <p class="modal-edition">ChromaShift Edition</p>
-                <p class="modal-subtitle">Hyper-Surreal Dreamscape Simulator</p>
-            </div>
-            <div class="modal-body">
-                <div class="modal-section">
-                    <h3>🌀 What is ChromaShift?</h3>
-                    <p>A special edition of Urban Life Simulator that transforms the urban environment into an anti-linear, open-agency dream simulator. Experience surrealist environments (melting reality, impossible physics) with total player freedom.</p>
-                </div>
-                <div class="modal-section">
-                    <h3>🎮 How to Play</h3>
-                    <ul>
-                        <li><strong>Drag</strong> to look around the 360° panorama</li>
-                        <li><strong>Scroll</strong> to zoom in/out</li>
-                        <li><strong>Click choice bubbles</strong> for guided surreal decisions</li>
-                        <li><strong>Type commands</strong> for unlimited creative freedom</li>
-                        <li><strong>Shift locations</strong> to instantly travel anywhere</li>
-                        <li><strong>Embrace chaos</strong> - there are no wrong choices</li>
-                    </ul>
-                </div>
-                <div class="modal-section">
-                    <h3>🧠 Chromatist Powers</h3>
-                    <p>As a Chromatist, you possess lucid awareness within the Chroma-Dream. You can manipulate reality through language:</p>
-                    <ul>
-                        <li><strong>Location Shifting:</strong> Type any destination (real or imagined) to instantly manifest there</li>
-                        <li><strong>Action Manifestation:</strong> Type any action to reshape the dream according to your will</li>
-                        <li><strong>Dual Control:</strong> Use bubbles for structure or commands for total freedom</li>
-                    </ul>
-                </div>
-                <div class="modal-section">
-                    <h3>🎨 Design Philosophy</h3>
-                    <p>No fixed narrative. No objectives. No winning or losing. Just infinite branching exploration through impossible dreamscapes where logic is broken and agency is absolute.</p>
-                </div>
-                <div class="modal-section awards-section">
-                    <img src="imgs/chroma_awards_logo.png" alt="Chroma Awards" class="inline-awards-logo">
-                    <p class="awards-text"><strong>Chroma Awards</strong> • Film • Music • Games</p>
-                </div>
-                <div class="modal-footer">
-                    <p><strong>Urban Life Simulator: ChromaShift</strong></p>
-                    <p class="version">Version 1.0 • 2025</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading Screen -->
-    <div id="splash-screen">
-        <div class="splash-content">
-            <div class="splash-logo-container">
-                <img src="imgs/uls_logo_4.png" alt="Urban Life Simulator" class="splash-uls-logo">
-            </div>
-            <div class="splash-divider">
-                <img src="imgs/chroma_glitch_icon.png" alt="ChromaShift Icon" class="splash-icon-small">
-            </div>
-            <h1 class="title-glitch" data-text="CHROMASHIFT">CHROMASHIFT</h1>
-            <p class="subtitle-splash">HYPER-SURREAL DREAMSCAPE EDITION</p>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
-            <p class="loading-status">Dissolving reality boundaries...</p>
-            <div class="splash-footer">
-                <img src="imgs/chroma_awards_logo.png" alt="Chroma Awards" class="splash-awards">
-                <p class="splash-awards-text">Film • Music • Games</p>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="chromashift.js"></script>
+    <script type="module" src="chromashift-navigator.js"></script>
 </body>
 </html>
